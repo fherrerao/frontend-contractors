@@ -7,7 +7,7 @@ import type { ContractorDocument } from '#/lib/types'
 import { FileUploadField, FormField } from '../molecules'
 
 interface UploadDocumentModalProps {
-  contractorId: string
+  projectId: string
   document: ContractorDocument | null
   onClose: () => void
 }
@@ -17,10 +17,10 @@ interface UploadValues {
   expiresAt?: Dayjs
 }
 
-export function UploadDocumentModal({ contractorId, document, onClose }: UploadDocumentModalProps) {
+export function UploadDocumentModal({ projectId, document, onClose }: UploadDocumentModalProps) {
   const [form] = Form.useForm<UploadValues>()
   const { message } = App.useApp()
-  const upload = useUploadDocument(contractorId)
+  const upload = useUploadDocument(projectId)
 
   useEffect(() => {
     if (document) form.resetFields()
@@ -31,7 +31,7 @@ export function UploadDocumentModal({ contractorId, document, onClose }: UploadD
     const values = await form.validateFields()
     try {
       await upload.mutateAsync({
-        typeId: document.typeId,
+        documentId: document.id,
         file: values.file as File,
         expiresAt: values.expiresAt?.endOf('day').toISOString(),
       })
@@ -54,10 +54,10 @@ export function UploadDocumentModal({ contractorId, document, onClose }: UploadD
       destroyOnHidden
     >
       <Typography.Paragraph strong style={{ marginBottom: 4 }}>
-        {document?.type.name}
+        {document?.name}
       </Typography.Paragraph>
-      {document?.type.description && (
-        <Typography.Paragraph type="secondary">{document.type.description}</Typography.Paragraph>
+      {document?.description && (
+        <Typography.Paragraph type="secondary">{document.description}</Typography.Paragraph>
       )}
       {document?.status === 'APPROVED' && (
         <Alert
@@ -71,7 +71,7 @@ export function UploadDocumentModal({ contractorId, document, onClose }: UploadD
         <FormField name="file" rules={[{ required: true, message: 'Adjunta un archivo' }]}>
           <FileUploadField />
         </FormField>
-        {document?.type.expires && (
+        {document?.expires && (
           <FormField
             label="Fecha de vencimiento"
             name="expiresAt"

@@ -35,7 +35,7 @@ export function AppLogo({ collapsed, inverse, size = 'default' }: AppLogoProps) 
             whiteSpace: 'nowrap',
           }}
         >
-          ContratistasPro
+          Contratistas
         </Typography.Text>
       )}
     </Flex>

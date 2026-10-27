@@ -23,7 +23,7 @@ export function DocumentViewerDrawer({ document, onClose, footer }: DocumentView
       open={!!document}
       onClose={onClose}
       size={screens.lg ? 860 : '100%'}
-      title={document?.type.name}
+      title={document?.name}
       extra={
         document && (
           <AppButton icon={<DownloadOutlined />} href={url} target="_blank">

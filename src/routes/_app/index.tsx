@@ -88,7 +88,7 @@ function DashboardPage() {
                 navigate({ to: '/contractors/$id', params: { id: user.contractorId! } })
               }
             >
-              Gestionar documentos
+              Ver proyectos
             </AppButton>
           )
         }
@@ -108,8 +108,8 @@ function DashboardPage() {
                 <StatusTag kind="contractor" status={user.contractor.status} />
               </Typography.Paragraph>
               <Typography.Text type="secondary">
-                Tu empresa queda habilitada cuando todos los documentos obligatorios estan
-                aprobados y vigentes.
+                Tu empresa queda habilitada cuando todos los proyectos activos tienen sus
+                documentos obligatorios aprobados y vigentes.
               </Typography.Text>
             </Card>
           </Col>
@@ -124,7 +124,13 @@ function DashboardPage() {
                   <List.Item
                     style={{ cursor: 'pointer' }}
                     onClick={() =>
-                      navigate({ to: '/contractors/$id', params: { id: item.contractor.id } })
+                      navigate({
+                        to: '/contractors/$contractorId/projects/$projectId',
+                        params: {
+                          contractorId: item.contractor.id,
+                          projectId: item.project.id,
+                        },
+                      })
                     }
                     extra={
                       <Typography.Text type="warning">
@@ -134,7 +140,11 @@ function DashboardPage() {
                   >
                     <List.Item.Meta
                       title={item.type.name}
-                      description={isContractor ? undefined : item.contractor.name}
+                      description={
+                        isContractor
+                          ? item.project.name
+                          : `${item.contractor.name} · ${item.project.name}`
+                      }
                     />
                   </List.Item>
                 )}

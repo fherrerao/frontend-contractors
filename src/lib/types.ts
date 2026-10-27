@@ -22,6 +22,13 @@ export interface LoginResponse {
   user: SessionUser
 }
 
+export interface DocumentSummary {
+  total: number
+  approved: number
+  submitted: number
+  rejected: number
+}
+
 export interface Contractor {
   id: string
   name: string
@@ -33,22 +40,73 @@ export interface Contractor {
   status: ContractorStatus
   isActive: boolean
   createdAt: string
-  documentSummary?: {
-    total: number
-    approved: number
-    submitted: number
-    rejected: number
-  }
+  projectCount?: number
+  documentSummary?: DocumentSummary
   users?: Array<{ id: string; name: string; email: string; isActive: boolean }>
 }
 
-export interface DocumentType {
+export interface DocumentRef {
+  id: string
+  name: string
+}
+
+export interface ProjectDocumentMeta {
   id: string
   name: string
   description: string | null
   required: boolean
   expires: boolean
+  status?: DocumentStatus
+}
+
+export interface ProjectDocumentInput {
+  id?: string
+  name: string
+  description?: string | null
+  required?: boolean
+  expires?: boolean
+}
+
+export interface Project {
+  id: string
+  name: string
+  description: string | null
+  code: string | null
+  status: ContractorStatus
   isActive: boolean
+  contractorId: string
+  createdAt: string
+  workerCount?: number
+  documentSummary?: DocumentSummary
+  documents?: Array<ProjectDocumentMeta>
+  contractor?: { id: string; name: string; taxId: string }
+  workers?: Array<
+    Worker & {
+      assignedAt?: string
+      documents?: Array<DocumentRef>
+    }
+  >
+}
+
+export interface WorkerProjectAssignment {
+  id: string
+  name: string
+  code: string | null
+  isActive: boolean
+  documents: Array<DocumentRef>
+}
+
+export interface Worker {
+  id: string
+  name: string
+  documentId: string
+  position: string
+  phone: string | null
+  email: string | null
+  isActive: boolean
+  contractorId: string
+  createdAt: string
+  projects?: Array<WorkerProjectAssignment>
 }
 
 export interface DocumentReview {
@@ -62,9 +120,11 @@ export interface DocumentReview {
 
 export interface ContractorDocument {
   id: string
-  contractorId: string
-  typeId: string
-  type: DocumentType
+  projectId: string
+  name: string
+  description: string | null
+  required: boolean
+  expires: boolean
   status: DocumentStatus
   fileName: string | null
   mimeType: string | null
@@ -73,6 +133,7 @@ export interface ContractorDocument {
   submittedAt: string | null
   uploadedBy: { id: string; name: string } | null
   reviews?: Array<DocumentReview>
+  project?: { id: string; name: string; code: string | null }
   contractor?: { id: string; name: string; taxId: string }
 }
 
@@ -94,6 +155,7 @@ export interface DashboardStats {
     id: string
     expiresAt: string
     type: { name: string }
+    project: { id: string; name: string }
     contractor: { id: string; name: string }
   }>
 }

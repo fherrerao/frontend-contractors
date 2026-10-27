@@ -1,7 +1,6 @@
 import {
   AuditOutlined,
   DashboardOutlined,
-  FileProtectOutlined,
   ShopOutlined,
   TeamOutlined,
   UserOutlined,
@@ -57,7 +56,6 @@ export function SideMenu({ user, collapsed, onNavigate }: SideMenuProps) {
   if (user.role === 'ADMIN') {
     const adminItems: Array<MenuItem> = [
       { key: '/admin/users', icon: <UserOutlined />, label: 'Usuarios' },
-      { key: '/admin/document-types', icon: <FileProtectOutlined />, label: 'Tipos de documento' },
     ]
     if (collapsed) {
       items.push({ key: 'admin-divider', type: 'divider' }, ...adminItems)

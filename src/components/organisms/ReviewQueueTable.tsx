@@ -22,7 +22,7 @@ export function ReviewQueueTable({ data, loading, onOpen }: ReviewQueueTableProp
       key: 'type',
       render: (_, d) => (
         <Flex vertical>
-          <Typography.Text strong>{d.type.name}</Typography.Text>
+          <Typography.Text strong>{d.name}</Typography.Text>
           <Typography.Text type="secondary" style={{ fontSize: 12 }} ellipsis>
             {d.fileName}
           </Typography.Text>
@@ -30,13 +30,13 @@ export function ReviewQueueTable({ data, loading, onOpen }: ReviewQueueTableProp
       ),
     },
     {
-      title: 'Contratista',
+      title: 'Contratista / Proyecto',
       key: 'contractor',
       render: (_, d) => (
         <Flex vertical>
           <Typography.Text>{d.contractor?.name}</Typography.Text>
           <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-            NIT {d.contractor?.taxId}
+            {d.project?.name ?? (d.contractor?.taxId ? `NIT ${d.contractor.taxId}` : '-')}
           </Typography.Text>
         </Flex>
       ),

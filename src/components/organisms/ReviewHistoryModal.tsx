@@ -16,7 +16,7 @@ export function ReviewHistoryModal({ document, onClose }: ReviewHistoryModalProp
   return (
     <Modal
       open={!!document}
-      title={`Historial · ${document?.type.name ?? ''}`}
+      title={`Historial · ${document?.name ?? ''}`}
       onCancel={onClose}
       footer={null}
       destroyOnHidden

@@ -2,10 +2,39 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { api } from '#/lib/api'
 import type { ContractorDocument, DocumentReview, ReviewAction } from '#/lib/types'
 
-export function useContractorDocuments(contractorId: string) {
+export function useProjectDocuments(projectId: string) {
   return useQuery({
-    queryKey: ['documents', contractorId],
-    queryFn: () => api<Array<ContractorDocument>>(`/contractors/${contractorId}/documents`),
+    queryKey: ['documents', projectId],
+    queryFn: () => api<Array<ContractorDocument>>(`/projects/${projectId}/documents`),
+    enabled: !!projectId,
+  })
+}
+
+export type DocumentInput = {
+  id?: string
+  name?: string
+  description?: string | null
+  required?: boolean
+  expires?: boolean
+}
+
+export function useSaveDocument(projectId: string) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, ...data }: DocumentInput) =>
+      id
+        ? api<ContractorDocument>(`/documents/${id}`, { method: 'PATCH', body: data })
+        : api<ContractorDocument>(`/projects/${projectId}/documents`, {
+            method: 'POST',
+            body: data,
+          }),
+    onSuccess: () =>
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['documents'] }),
+        queryClient.invalidateQueries({ queryKey: ['projects'] }),
+        queryClient.invalidateQueries({ queryKey: ['contractors'] }),
+        queryClient.invalidateQueries({ queryKey: ['dashboard'] }),
+      ]),
   })
 }
 
@@ -21,20 +50,28 @@ function useInvalidateDocuments() {
   const queryClient = useQueryClient()
   return () =>
     Promise.all(
-      ['documents', 'contractors', 'reviews', 'document-reviews', 'dashboard'].map((key) =>
-        queryClient.invalidateQueries({ queryKey: [key] }),
+      ['documents', 'projects', 'contractors', 'reviews', 'document-reviews', 'dashboard'].map(
+        (key) => queryClient.invalidateQueries({ queryKey: [key] }),
       ),
     )
 }
 
-export function useUploadDocument(contractorId: string) {
+export function useUploadDocument(projectId: string) {
   const invalidate = useInvalidateDocuments()
   return useMutation({
-    mutationFn: ({ typeId, file, expiresAt }: { typeId: string; file: File; expiresAt?: string }) => {
+    mutationFn: ({
+      documentId,
+      file,
+      expiresAt,
+    }: {
+      documentId: string
+      file: File
+      expiresAt?: string
+    }) => {
       const form = new FormData()
       form.append('file', file)
       if (expiresAt) form.append('expiresAt', expiresAt)
-      return api<ContractorDocument>(`/contractors/${contractorId}/documents/${typeId}`, {
+      return api<ContractorDocument>(`/projects/${projectId}/documents/${documentId}/file`, {
         method: 'POST',
         body: form,
       })

@@ -47,7 +47,7 @@ export function ReviewModal({ document, action, onClose, onDone }: ReviewModalPr
       destroyOnHidden
     >
       <Typography.Paragraph type="secondary">
-        {document?.type.name}
+        {document?.name}
         {document?.contractor && ` · ${document.contractor.name}`}
       </Typography.Paragraph>
       <Form form={form} layout="vertical">

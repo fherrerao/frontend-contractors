@@ -77,7 +77,7 @@ export function AuthTemplate({ children }: { children: ReactNode }) {
             </Flex>
           </Flex>
           <Typography.Text style={{ color: 'rgba(255,255,255,0.5)' }}>
-            © {new Date().getFullYear()} ContratistasPro
+            © {new Date().getFullYear()} Contratistas
           </Typography.Text>
         </Flex>
       </Col>

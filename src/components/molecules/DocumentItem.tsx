@@ -15,20 +15,24 @@ interface DocumentItemProps {
   document: ContractorDocument
   canUpload: boolean
   canReview: boolean
+  canManage?: boolean
   onUpload: () => void
   onView: () => void
   onHistory: () => void
   onReview: () => void
+  onEdit?: () => void
 }
 
 export function DocumentItem({
   document,
   canUpload,
   canReview,
+  canManage,
   onUpload,
   onView,
   onHistory,
   onReview,
+  onEdit,
 }: DocumentItemProps) {
   const { token } = theme.useToken()
   const lastReview = document.reviews?.[0]
@@ -59,8 +63,8 @@ export function DocumentItem({
 
         <Flex vertical gap={6} style={{ flex: '1 1 240px', minWidth: 0 }}>
           <Flex gap={8} align="center" wrap>
-            <Typography.Text strong>{document.type.name}</Typography.Text>
-            {document.type.required ? (
+            <Typography.Text strong>{document.name}</Typography.Text>
+            {document.required ? (
               <Tag color="red" variant="outlined">
                 Obligatorio
               </Tag>
@@ -69,9 +73,9 @@ export function DocumentItem({
             )}
             <StatusTag kind="document" status={document.status} />
           </Flex>
-          {document.type.description && (
+          {document.description && (
             <Typography.Text type="secondary" style={{ fontSize: 13 }}>
-              {document.type.description}
+              {document.description}
             </Typography.Text>
           )}
           <Space size={16} wrap style={{ fontSize: 12 }}>
@@ -104,6 +108,9 @@ export function DocumentItem({
         </Flex>
 
         <Flex gap={8} wrap justify="flex-end" style={{ marginLeft: 'auto' }}>
+          {canManage && onEdit && (
+            <AppButton onClick={onEdit}>Editar</AppButton>
+          )}
           {hasFile && (
             <Tooltip title="Ver archivo">
               <AppButton icon={<EyeOutlined />} onClick={onView} />

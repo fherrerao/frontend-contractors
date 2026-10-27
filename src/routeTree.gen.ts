@@ -13,10 +13,10 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AppReviewsRouteImport } from './routes/_app/reviews'
-import { Route as AppAdminDocumentTypesRouteImport } from './routes/_app/admin/document-types'
 import { Route as AppAdminUsersRouteImport } from './routes/_app/admin/users'
 import { Route as AppContractorsIndexRouteImport } from './routes/_app/contractors/index'
 import { Route as AppContractorsIdRouteImport } from './routes/_app/contractors/$id'
+import { Route as AppContractorsContractorIdProjectsProjectIdRouteImport } from './routes/_app/contractors/$contractorId/projects/$projectId'
 
 const AppRoute = AppRouteImport.update({
   id: '/_app',
@@ -37,11 +37,6 @@ const AppReviewsRoute = AppReviewsRouteImport.update({
   path: '/reviews',
   getParentRoute: () => AppRoute,
 } as any)
-const AppAdminDocumentTypesRoute = AppAdminDocumentTypesRouteImport.update({
-  id: '/admin/document-types',
-  path: '/admin/document-types',
-  getParentRoute: () => AppRoute,
-} as any)
 const AppAdminUsersRoute = AppAdminUsersRouteImport.update({
   id: '/admin/users',
   path: '/admin/users',
@@ -57,24 +52,30 @@ const AppContractorsIdRoute = AppContractorsIdRouteImport.update({
   path: '/contractors/$id',
   getParentRoute: () => AppRoute,
 } as any)
+const AppContractorsContractorIdProjectsProjectIdRoute =
+  AppContractorsContractorIdProjectsProjectIdRouteImport.update({
+    id: '/contractors/$contractorId/projects/$projectId',
+    path: '/contractors/$contractorId/projects/$projectId',
+    getParentRoute: () => AppRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/login': typeof LoginRoute
   '/reviews': typeof AppReviewsRoute
-  '/admin/document-types': typeof AppAdminDocumentTypesRoute
   '/admin/users': typeof AppAdminUsersRoute
   '/contractors/$id': typeof AppContractorsIdRoute
   '/contractors/': typeof AppContractorsIndexRoute
+  '/contractors/$contractorId/projects/$projectId': typeof AppContractorsContractorIdProjectsProjectIdRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/reviews': typeof AppReviewsRoute
   '/': typeof AppIndexRoute
-  '/admin/document-types': typeof AppAdminDocumentTypesRoute
   '/admin/users': typeof AppAdminUsersRoute
   '/contractors/$id': typeof AppContractorsIdRoute
   '/contractors': typeof AppContractorsIndexRoute
+  '/contractors/$contractorId/projects/$projectId': typeof AppContractorsContractorIdProjectsProjectIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -82,10 +83,10 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/_app/reviews': typeof AppReviewsRoute
   '/_app/': typeof AppIndexRoute
-  '/_app/admin/document-types': typeof AppAdminDocumentTypesRoute
   '/_app/admin/users': typeof AppAdminUsersRoute
   '/_app/contractors/$id': typeof AppContractorsIdRoute
   '/_app/contractors/': typeof AppContractorsIndexRoute
+  '/_app/contractors/$contractorId/projects/$projectId': typeof AppContractorsContractorIdProjectsProjectIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -93,29 +94,29 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/reviews'
-    | '/admin/document-types'
     | '/admin/users'
     | '/contractors/$id'
     | '/contractors/'
+    | '/contractors/$contractorId/projects/$projectId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
     | '/reviews'
     | '/'
-    | '/admin/document-types'
     | '/admin/users'
     | '/contractors/$id'
     | '/contractors'
+    | '/contractors/$contractorId/projects/$projectId'
   id:
     | '__root__'
     | '/_app'
     | '/login'
     | '/_app/reviews'
     | '/_app/'
-    | '/_app/admin/document-types'
     | '/_app/admin/users'
     | '/_app/contractors/$id'
     | '/_app/contractors/'
+    | '/_app/contractors/$contractorId/projects/$projectId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -153,13 +154,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppReviewsRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/admin/document-types': {
-      id: '/_app/admin/document-types'
-      path: '/admin/document-types'
-      fullPath: '/admin/document-types'
-      preLoaderRoute: typeof AppAdminDocumentTypesRouteImport
-      parentRoute: typeof AppRoute
-    }
     '/_app/admin/users': {
       id: '/_app/admin/users'
       path: '/admin/users'
@@ -181,25 +175,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppContractorsIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/contractors/$contractorId/projects/$projectId': {
+      id: '/_app/contractors/$contractorId/projects/$projectId'
+      path: '/contractors/$contractorId/projects/$projectId'
+      fullPath: '/contractors/$contractorId/projects/$projectId'
+      preLoaderRoute: typeof AppContractorsContractorIdProjectsProjectIdRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
 interface AppRouteChildren {
   AppReviewsRoute: typeof AppReviewsRoute
   AppIndexRoute: typeof AppIndexRoute
-  AppAdminDocumentTypesRoute: typeof AppAdminDocumentTypesRoute
   AppAdminUsersRoute: typeof AppAdminUsersRoute
   AppContractorsIdRoute: typeof AppContractorsIdRoute
   AppContractorsIndexRoute: typeof AppContractorsIndexRoute
+  AppContractorsContractorIdProjectsProjectIdRoute: typeof AppContractorsContractorIdProjectsProjectIdRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppReviewsRoute: AppReviewsRoute,
   AppIndexRoute: AppIndexRoute,
-  AppAdminDocumentTypesRoute: AppAdminDocumentTypesRoute,
   AppAdminUsersRoute: AppAdminUsersRoute,
   AppContractorsIdRoute: AppContractorsIdRoute,
   AppContractorsIndexRoute: AppContractorsIndexRoute,
+  AppContractorsContractorIdProjectsProjectIdRoute:
+    AppContractorsContractorIdProjectsProjectIdRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
